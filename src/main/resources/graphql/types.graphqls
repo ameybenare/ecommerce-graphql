@@ -1,0 +1,69 @@
+ type User {
+  id: ID!
+  name: String!
+  email: String!
+  orders: [Order!]!
+  cart: Cart
+}
+
+type Category {
+  id: ID!
+  name: String!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  price: Float!
+  image: String
+  categoryName: String
+
+  # GraphQL advantages: derived fields without new REST endpoints
+  avgRating: Float
+  reviewCount: Int
+
+  reviews: [Review!]!
+}
+
+type Review {
+  id: ID!
+  rating: Int!
+  comment: String!
+  user: User!
+  productId: ID!    # convenient for resolvers
+}
+
+type CartItem {
+  id: ID!
+  productId: ID!
+  product: Product!
+  quantity: Int!
+  price: Float!
+  subtotal: Float!
+}
+
+type Cart {
+  id: ID!
+  userId: ID!
+  items: [CartItem!]!
+  total: Float!
+}
+
+type OrderItem {
+  id: ID!
+  product: Product!
+  quantity: Int!
+  price: Float!
+  subtotal: Float!
+}
+
+type Order {
+  id: ID!
+  userId: ID!
+  items: [OrderItem!]!
+  total: Float!
+  createdAt: String
+}
+
+# Optionally expose lightweight DTOs if you prefer

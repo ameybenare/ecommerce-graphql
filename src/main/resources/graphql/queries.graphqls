@@ -1,0 +1,16 @@
+type Query {
+  # Products
+  products: [Product!]!
+  product(id: ID!): Product
+
+  # Cart
+  cartByUser(userId: ID!): Cart
+
+  # Orders
+  ordersByUser(userId: ID!): [Order!]!
+
+  # Categories (to mirror REST)
+  categories: [Category!]!
+  
+   user(id: ID!): User
+}

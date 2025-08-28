@@ -1,0 +1,14 @@
+type Mutation {
+  # Cart operations (one mutation covers add/update/remove)
+  modifyCart(userId: ID!, productId: ID!, quantity: Int!): Cart
+
+  # Checkout (create order + clear cart) to demonstrate fewer round trips
+  checkout(userId: ID!): Order
+
+  # Reviews (with duplicate prevention enforced in service)
+  addReview(userId: ID!, productId: ID!, rating: Int!, comment: String!): Review
+  
+  login(email: String!, password: String!): User!
+  
+  createOrder(order: OrderInput!): Order!
+}
