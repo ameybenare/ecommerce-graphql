@@ -12,3 +12,13 @@ type Mutation {
   
   createOrder(order: OrderInput!): Order!
 }
+input OrderItemInput {
+  productId: ID!
+  quantity: Int!
+  price: Float!
+}
+
+input OrderInput {
+  userId: ID!
+  items: [OrderItemInput!]!
+  }

@@ -17,7 +17,7 @@ type Product {
   description: String
   price: Float!
   image: String
-  categoryName: String
+  category: Category!
 
   # GraphQL advantages: derived fields without new REST endpoints
   avgRating: Float

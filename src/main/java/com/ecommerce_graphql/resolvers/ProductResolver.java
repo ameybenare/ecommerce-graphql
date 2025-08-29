@@ -21,7 +21,7 @@ public class ProductResolver {
 	  }
 
 	  @QueryMapping public List<ProductDTO> products() { return productService.getAllProducts(); }
-	  @QueryMapping public ProductDTO product(@Argument Long id) { return productService.getProductById(id); }
+	  @QueryMapping public ProductDTO productById(@Argument Long id) { return productService.getProductById(id); }
 
 	  @SchemaMapping(typeName = "Product", field = "avgRating")
 	  public Double avgRating(ProductDTO product) { return reviewRepo.averageRatingByProductId(product.getId()); }
