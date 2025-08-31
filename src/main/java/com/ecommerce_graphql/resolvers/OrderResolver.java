@@ -37,15 +37,15 @@ public class OrderResolver {
         return orderService.getOrderByUserId(userId);
     }
 
-    // ---- Mutations ----
-    @MutationMapping
-    public OrderDTO createOrder(@Argument("order") OrderDTO orderDTO) {
-        return orderService.createOrder(orderDTO);
-    }
+//    // ---- Mutations ----
+//    @MutationMapping
+//    public OrderDTO createOrder(@Argument("order") OrderDTO orderDTO) {
+//        return orderService.createOrder(orderDTO);
+//    }
 
     @MutationMapping
     @Transactional
-    public OrderDTO checkout(@Argument Long userId) {
+    public OrderDTO createOrder(@Argument Long userId) {
         OrderDTO order = orderService.createOrderFromCart(userId);
         cartService.clearAllCartItems(userId); // clear after checkout
         return order;

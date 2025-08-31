@@ -1,6 +1,6 @@
 type Mutation {
   # Cart operations (one mutation covers add/update/remove)
-  modifyCart(userId: ID!, productId: ID!, quantity: Int!): Cart
+  modifyCart(userId: ID!, productId: ID!, quantity: Int!, addToCart: Boolean!): Cart
 
   # Checkout (create order + clear cart) to demonstrate fewer round trips
   checkout(userId: ID!): Order
@@ -10,7 +10,7 @@ type Mutation {
   
   login(email: String!, password: String!): User!
   
-  createOrder(order: OrderInput!): Order!
+  createOrder(userId: ID!): Order!
 }
 input OrderItemInput {
   productId: ID!

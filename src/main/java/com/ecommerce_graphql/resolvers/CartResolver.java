@@ -24,9 +24,12 @@ public class CartResolver {
   public CartDTO cartByUser(@Argument Long userId) { return cartService.getCartByUserId(userId); }
 
   @MutationMapping
-  public CartDTO modifyCart(@Argument Long userId, @Argument Long productId, @Argument Integer quantity) {
-    if (quantity == null || quantity < 0) throw new IllegalArgumentException("quantity must be >= 0");
-    return cartService.updateCartItemQuantity(userId, quantity, productId );
+  public CartDTO modifyCart(@Argument Long userId, @Argument Long productId, @Argument Integer quantity, @Argument Boolean addToCart) {
+    if (quantity == null || quantity == 0) {
+    	return cartService.removeCartItem(userId, productId);
+    } 
+    //return cartService.updateCartItemQuantity(userId, quantity, productId );
+    return cartService.addItemToCart(userId, quantity, productId ,addToCart  );
   }
 
   // Derived fields

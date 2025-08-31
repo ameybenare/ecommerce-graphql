@@ -58,6 +58,7 @@ public class ReviewService {
         dto.setUserId(review.getUser().getId());
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
+        dto.setUserName(review.getUser().getName());
         return dto;
     }
 }

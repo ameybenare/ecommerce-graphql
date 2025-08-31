@@ -45,7 +45,8 @@ public class CartService {
     }
 
     // ✅ Add item to cart
-    public CartItemDTO addItemToCart(Long userId, CartItemDTO cartItemDTO) {
+    //public CartItemDTO addItemToCart(Long userId, CartItemDTO cartItemDTO) {
+    public CartDTO addItemToCart(Long userId, int quantity, Long productId, Boolean addToCart) {
         Cart cart = cartRepository.findByUserId(userId).orElseGet(() -> {
             Cart newCart = new Cart();
             User user = userRepository.findById(userId)
@@ -55,7 +56,7 @@ public class CartService {
             return cartRepository.save(newCart);
         });
 
-        Product product = productRepository.findById(cartItemDTO.getProductId())
+        Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         Optional<CartItem> existingItem = cartItemRepository.findByCartAndProduct(cart, product);
@@ -63,17 +64,21 @@ public class CartService {
         CartItem cartItem;
         if (existingItem.isPresent()) {
             cartItem = existingItem.get();
-            cartItem.setQuantity(cartItem.getQuantity() + cartItemDTO.getQuantity());
+            System.out.println("quantity in existing item = "+ quantity);
+            System.out.println("cartItem.getQuantity() in existing item = "+ cartItem.getQuantity());
+            if(addToCart) quantity = cartItem.getQuantity()+ quantity;   
+            cartItem.setQuantity(quantity);
         } else {
             cartItem = new CartItem();
             cartItem.setCart(cart);
             cartItem.setProduct(product);
-            cartItem.setQuantity(cartItemDTO.getQuantity());
+            cartItem.setQuantity(quantity);
             cartItem.setPrice(product.getPrice());
         }
 
         cartItem = cartItemRepository.save(cartItem);
-        return mapCartItem(cartItem);
+        //return mapCartItem(cartItem);
+        return mapCart(cart);
     }
 
     // ✅ Update quantity
@@ -94,7 +99,7 @@ public class CartService {
 
     // ✅ Remove one item
     @Transactional
-    public void removeCartItem(Long userId, Long productId) {
+    public CartDTO removeCartItem(Long userId, Long productId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("No Cart Found"));
 
@@ -105,6 +110,8 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("No Item in Cart"));
 
         cartItemRepository.delete(cartItem);
+        cartItemRepository.flush();
+        return getCartByUserId(userId);
     }
 
     // ✅ Clear all items

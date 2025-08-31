@@ -16,7 +16,11 @@ import com.ecommerce_graphql.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -102,17 +106,26 @@ public class OrderService {
         Order order = new Order();
         order.setUser(user);
         order.setOrderDate(LocalDateTime.now());
+        order.setTotal(BigDecimal.ZERO);
         Order savedOrder = orderRepository.save(order);
 
+        BigDecimal totalOrderPrice = BigDecimal.ZERO;
+        List<OrderItem> orderItemList = new ArrayList<OrderItem>();
         for (CartItem cartItem : cart.getItems()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(savedOrder);
             orderItem.setProduct(cartItem.getProduct());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setPrice(cartItem.getPrice());
-            orderItemRepository.save(orderItem);
+            totalOrderPrice = totalOrderPrice
+            		.add(BigDecimal.valueOf(cartItem.getQuantity()).multiply(cartItem.getPrice()));
+            orderItemList.add(orderItem);
+           
         }
-
+        orderItemRepository.saveAll(orderItemList);
+        order.setTotal(totalOrderPrice);
+		order = orderRepository.save(order);
+		order.setItems(orderItemList);
         return mapToDTO(savedOrder);
     }
 
@@ -120,8 +133,12 @@ public class OrderService {
         OrderDTO dto = new OrderDTO();
         dto.setId(order.getId());
         dto.setUserId(order.getUser().getId());
-        dto.setOrderDate(order.getOrderDate());
-
+        LocalDateTime localDateTime = order.getOrderDate();
+        if(localDateTime!=null) {
+        	  dto.setOrderDate(localDateTime.atOffset(ZoneOffset.UTC));	
+        }
+        
+        
         List<OrderItemDTO> items = order.getItems()
                 .stream()
                 .map(item -> {
@@ -130,6 +147,7 @@ public class OrderService {
                     itemDTO.setProductId(item.getProduct().getId());
                     itemDTO.setQuantity(item.getQuantity());
                     itemDTO.setPrice(item.getPrice());
+                    itemDTO.setProductName(item.getProduct().getName());
                     return itemDTO;
                 })
                 .collect(Collectors.toList());
