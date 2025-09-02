@@ -37,11 +37,17 @@ public class CartService {
     }
 
     // ✅ Fetch Cart by User ID
-    public CartDTO getCartByUserId(Long userId) {
+ /*   public CartDTO getCartByUserId(Long userId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         return mapCart(cart);
+    }*/
+    
+    public CartDTO getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId)
+                .map(this::mapCart)
+                .orElse(null); // ✅ Return null instead of throwing an exception
     }
 
     // ✅ Add item to cart
