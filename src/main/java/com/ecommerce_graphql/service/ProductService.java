@@ -3,6 +3,9 @@ package com.ecommerce_graphql.service;
 import com.ecommerce_graphql.DTO.ProductDTO;
 import com.ecommerce_graphql.model.Product;
 import com.ecommerce_graphql.repository.ProductRepository;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +21,9 @@ public class ProductService {
     }
 
     // Get all products
+    //@Cacheable("products")
     public List<ProductDTO> getAllProducts() {
+    	//System.out.println("🚀 Fetching products from DB..."); 
         return productRepository.findAll()
                 .stream()
                 .map(this::mapToDTO)
@@ -26,7 +31,10 @@ public class ProductService {
     }
 
     // Get product by id
+    //@Cacheable(value = "products", key = "#id")
     public ProductDTO getProductById(Long id) {
+    	//System.out.println("🚀 Fetching " + id +"from DB..."); 
+
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
         return mapToDTO(product);
@@ -40,6 +48,7 @@ public class ProductService {
     }
 
     // Update product
+    //@CacheEvict(value = {"products", "product"}, allEntries = true)
     public ProductDTO updateProduct(Long id, ProductDTO dto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
