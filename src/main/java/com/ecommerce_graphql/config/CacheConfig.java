@@ -12,18 +12,16 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @EnableCaching
 public class CacheConfig {
-
     @Bean
     public Caffeine<Object, Object> caffeineConfig() {
         // Customize expiry and size limit
         return Caffeine.newBuilder()
                 .expireAfterWrite(10, TimeUnit.MINUTES)
-                .maximumSize(1000);
+                .maximumSize(100);
     }
-
     @Bean
     public CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
-        CaffeineCacheManager manager = new CaffeineCacheManager("products", "categories");
+        CaffeineCacheManager manager = new CaffeineCacheManager("products", "categories","cart", "order","Reviews");
         manager.setCaffeine(caffeine);
         return manager;
     }

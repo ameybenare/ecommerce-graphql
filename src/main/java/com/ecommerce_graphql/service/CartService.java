@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,22 +38,16 @@ public class CartService {
         this.userRepository = userRepository;
     }
 
-    // ✅ Fetch Cart by User ID
- /*   public CartDTO getCartByUserId(Long userId) {
-        Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-
-        return mapCart(cart);
-    }*/
-    
+  
+    @Cacheable(value = "cart", key = "#userId")
     public CartDTO getCartByUserId(Long userId) {
+    	System.out.println("Fetched From DB");
         return cartRepository.findByUserId(userId)
                 .map(this::mapCart)
-                .orElse(null); // ✅ Return null instead of throwing an exception
+                .orElse(null); // Return null instead of throwing an exception
     }
 
-    // ✅ Add item to cart
-    //public CartItemDTO addItemToCart(Long userId, CartItemDTO cartItemDTO) {
+    @CacheEvict(value = "cart", key = "#userId")
     public CartDTO addItemToCart(Long userId, int quantity, Long productId, Boolean addToCart) {
         Cart cart = cartRepository.findByUserId(userId).orElseGet(() -> {
             Cart newCart = new Cart();
@@ -70,8 +66,6 @@ public class CartService {
         CartItem cartItem;
         if (existingItem.isPresent()) {
             cartItem = existingItem.get();
-            System.out.println("quantity in existing item = "+ quantity);
-            System.out.println("cartItem.getQuantity() in existing item = "+ cartItem.getQuantity());
             if(addToCart) quantity = cartItem.getQuantity()+ quantity;   
             cartItem.setQuantity(quantity);
         } else {
@@ -86,8 +80,8 @@ public class CartService {
         //return mapCartItem(cartItem);
         return mapCart(cart);
     }
-
-    // ✅ Update quantity
+/*
+    @CacheEvict(value = "cart", key = "#userId")
     public CartDTO  updateCartItemQuantity(Long userId, int quantity, Long productId) {
         Cart cart = cartRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("No Cart Found"));
@@ -102,8 +96,8 @@ public class CartService {
         cartItemRepository.save(cartItem);
         return mapCart(cart);
     }
-
-    // ✅ Remove one item
+*/
+    @CacheEvict(value = "cart", key = "#userId")
     @Transactional
     public CartDTO removeCartItem(Long userId, Long productId) {
         Cart cart = cartRepository.findByUserId(userId)
@@ -129,10 +123,7 @@ public class CartService {
         cartItemRepository.deleteAllByCartId(cart.getId());
     }
 
-    // -------------------------------
-    // 📌 Manual Mapping Methods
-    // -------------------------------
-
+    
     private CartDTO mapCart(Cart cart) {
         CartDTO dto = new CartDTO();
         dto.setId(cart.getId());

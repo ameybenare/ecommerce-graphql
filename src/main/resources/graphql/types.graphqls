@@ -1,5 +1,22 @@
 scalar DateTime
 
+type CartItem {
+  id: ID!
+  productId: ID!
+  product: Product!
+  quantity: Int!
+  price: Float!
+  subtotal: Float!
+  productName: String!
+}
+
+type Cart {
+  id: ID!
+  userId: ID!
+  items: [CartItem!]!
+  total: Float!
+}
+
  type User {
   id: ID!
   name: String!
@@ -11,6 +28,15 @@ scalar DateTime
 type Category {
   id: ID!
   name: String!
+}
+
+type Review {
+  id: ID!
+  rating: Int!
+  comment: String!
+  user: User!
+  userName: String!
+  productId: ID!   
 }
 
 type Product {
@@ -28,31 +54,8 @@ type Product {
   reviews: [Review!]!
 }
 
-type Review {
-  id: ID!
-  rating: Int!
-  comment: String!
-  user: User!
-  userName: String!
-  productId: ID!    # convenient for resolvers
-}
 
-type CartItem {
-  id: ID!
-  productId: ID!
-  product: Product!
-  quantity: Int!
-  price: Float!
-  subtotal: Float!
-  productName: String!
-}
 
-type Cart {
-  id: ID!
-  userId: ID!
-  items: [CartItem!]!
-  total: Float!
-}
 
 type OrderItem {
   id: ID!

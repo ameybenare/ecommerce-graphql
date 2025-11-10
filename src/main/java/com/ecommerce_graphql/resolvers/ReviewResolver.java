@@ -28,7 +28,9 @@ public class ReviewResolver {
 
   // Review.user
   @SchemaMapping(typeName = "Review", field = "user")
-  public UserDTO user(ReviewDTO review) { return userService.getUserById(review.getUserId()); }
+  public UserDTO user(ReviewDTO review) { 
+	  return userService.getUserById(review.getUserId()); 
+	  }
 
   @MutationMapping
   public ReviewDTO addReview(@Argument Long userId, @Argument Long productId,

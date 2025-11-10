@@ -15,14 +15,7 @@ public class AuthResolver {
         this.authService = authService;
     }
 
-   /* @MutationMapping
-    public UserDTO register(@Argument("input") UserInput input) {
-        UserDTO dto = new UserDTO();
-        dto.setName(input.getName());
-        dto.setEmail(input.getEmail());
-        dto.setPassword(input.getPassword());
-        return authService.register(dto);
-    }*/
+    
 
     @MutationMapping
     public UserDTO login(@Argument String email, @Argument String password) {

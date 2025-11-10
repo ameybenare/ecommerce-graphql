@@ -21,9 +21,9 @@ public class ProductService {
     }
 
     // Get all products
-    //@Cacheable("products")
+    @Cacheable("products")
     public List<ProductDTO> getAllProducts() {
-    	//System.out.println("🚀 Fetching products from DB..."); 
+    	System.out.println("Fetching products from DB..."); 
         return productRepository.findAll()
                 .stream()
                 .map(this::mapToDTO)
@@ -31,9 +31,9 @@ public class ProductService {
     }
 
     // Get product by id
-    //@Cacheable(value = "products", key = "#id")
+    @Cacheable(value = "products", key = "#id")
     public ProductDTO getProductById(Long id) {
-    	//System.out.println("🚀 Fetching " + id +"from DB..."); 
+    	System.out.println("Fetching " + id +"from DB..."); 
 
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -48,7 +48,7 @@ public class ProductService {
     }
 
     // Update product
-    //@CacheEvict(value = {"products", "product"}, allEntries = true)
+    @CacheEvict(value = {"products", "product"}, allEntries = true)
     public ProductDTO updateProduct(Long id, ProductDTO dto) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));

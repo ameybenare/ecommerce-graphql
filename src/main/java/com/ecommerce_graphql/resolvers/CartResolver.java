@@ -28,7 +28,6 @@ public class CartResolver {
     if (quantity == null || quantity == 0) {
     	return cartService.removeCartItem(userId, productId);
     } 
-    //return cartService.updateCartItemQuantity(userId, quantity, productId );
     return cartService.addItemToCart(userId, quantity, productId ,addToCart  );
   }
 

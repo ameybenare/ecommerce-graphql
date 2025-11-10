@@ -21,6 +21,7 @@ public class User {
 	private List<Order> orders;
 	
 	@OneToMany(mappedBy = "user")
+	//@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Cart> carts;
 
 	public Long getId() {

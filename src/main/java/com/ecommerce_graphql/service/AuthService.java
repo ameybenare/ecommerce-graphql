@@ -15,16 +15,7 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
-    // Register user
-    public UserDTO register(UserDTO dto) {
-        User user = new User();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        //user.setPassword(dto.getPassword()); // in real life: hash password
-
-        User saved = userRepository.save(user);
-        return mapToDTO(saved);
-    }
+  
 
     // Login
     public UserDTO login(String email, String password) {

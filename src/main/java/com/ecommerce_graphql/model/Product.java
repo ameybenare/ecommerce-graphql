@@ -24,11 +24,7 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
-    
-    /*
-    @OneToMany(mappedBy = "product")
-    private List<Review> reviews;
-    */
+     
 	public Long getId() {
 		return id;
 	}
@@ -76,15 +72,5 @@ public class Product {
 	public void setImage(String image) {
 		this.image = image;
 	}
-
-	
-	
-	/*
-	public List<Review> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(List<Review> reviews) {
-		this.reviews = reviews;
-	}*/
+ 
 }

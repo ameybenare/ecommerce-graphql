@@ -7,6 +7,8 @@ import com.ecommerce_graphql.model.User;
 import com.ecommerce_graphql.repository.ProductRepository;
 import com.ecommerce_graphql.repository.ReviewRepository;
 import com.ecommerce_graphql.repository.UserRepository;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,8 +28,9 @@ public class ReviewService {
         this.productRepository = productRepository;
         this.userRepository = userRepository;
     }
-
+    @Cacheable(value = "Reviews", key = "#productId")
     public List<ReviewDTO> getReviewsByProduct(Long productId) {
+    	System.out.println("In Review");
         return reviewRepository.findByProductId(productId)
                 .stream()
                 .map(this::mapToDTO)

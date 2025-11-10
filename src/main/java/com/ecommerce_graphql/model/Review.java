@@ -13,11 +13,7 @@ public class Review {
     @Column(columnDefinition = "TEXT")
     private String comment;
     
-    /*
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-	*/
+     
     
     @Column(name = "product_id")
     private Long productId;
@@ -49,15 +45,7 @@ public class Review {
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
-	/*
-	public Product getProduct() {
-		return product;
-	}
-
-	public void setProduct(Product product) {
-		this.product = product;
-	}
-	*/
+	 
 	public User getUser() {
 		return user;
 	}

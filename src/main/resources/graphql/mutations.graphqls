@@ -2,10 +2,10 @@ type Mutation {
   # Cart operations (one mutation covers add/update/remove)
   modifyCart(userId: ID!, productId: ID!, quantity: Int!, addToCart: Boolean!): Cart
 
-  # Checkout (create order + clear cart) to demonstrate fewer round trips
+  # Checkout (create order + clear cart)  
   checkout(userId: ID!): Order
 
-  # Reviews (with duplicate prevention enforced in service)
+  # Reviews  
   addReview(userId: ID!, productId: ID!, rating: Int!, comment: String!): Review
   
   login(email: String!, password: String!): User!

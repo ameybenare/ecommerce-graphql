@@ -13,6 +13,9 @@ import com.ecommerce_graphql.repository.OrderItemRepository;
 import com.ecommerce_graphql.repository.OrderRepository;
 import com.ecommerce_graphql.repository.ProductRepository;
 import com.ecommerce_graphql.repository.UserRepository;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,10 +53,10 @@ public class OrderService {
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
-
+    @Cacheable(value = "order", key = "#userId")
     public List<OrderDTO> getOrderByUserId(Long userId ){
     	 List<Order> orders = orderRepository.findByUserId(userId); 
-        
+    	 System.out.println("Fetching orders for user " + userId + " from DB");
         if (orders.isEmpty()) {
             throw new RuntimeException("No orders found for user " + userId);
         }
@@ -65,6 +68,7 @@ public class OrderService {
 
 
     @Transactional
+    @CacheEvict(value = {"order"}, allEntries = true)
     public OrderDTO createOrder(OrderDTO dto) {
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -92,6 +96,7 @@ public class OrderService {
     }
     
     @Transactional
+    @CacheEvict(value = {"order"}, allEntries = true)
     public OrderDTO createOrderFromCart(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));

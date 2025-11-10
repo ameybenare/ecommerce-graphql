@@ -36,12 +36,7 @@ public class OrderResolver {
     public List<OrderDTO> ordersByUser(@Argument Long userId) {
         return orderService.getOrderByUserId(userId);
     }
-
-//    // ---- Mutations ----
-//    @MutationMapping
-//    public OrderDTO createOrder(@Argument("order") OrderDTO orderDTO) {
-//        return orderService.createOrder(orderDTO);
-//    }
+ 
 
     @MutationMapping
     @Transactional
@@ -51,7 +46,7 @@ public class OrderResolver {
         return order;
     }
 
-    // ---- Extra schema mappings ----
+    
     @SchemaMapping(typeName = "OrderItem", field = "subtotal")
     public Double subtotal(OrderItemDTO item) {
         return item.getPrice().doubleValue() * item.getQuantity();
